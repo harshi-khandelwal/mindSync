@@ -30,3 +30,4 @@ router.route("/promote/:userId").patch(verifyJWT, isAdmin, promoteUserToAdmin);
 
 export default router;
 
+//postman testing done 

@@ -164,9 +164,9 @@ const removeCollaborator = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Workspace not found");
   }
 
-  if (!workspace.owner.equals(req.user._id)) {
-    throw new ApiError(403, "Only the owner can remove collaborators");
-  }
+  if (!workspace.owner || !req.user || !workspace.owner.equals(req.user._id)) {
+  throw new ApiError(403, "Only the owner can update the workspace");
+}
 
   workspace.collaborators = workspace.collaborators.filter(
     (id) => id.toString() !== userId

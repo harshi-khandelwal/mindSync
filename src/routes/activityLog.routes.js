@@ -18,3 +18,5 @@ router.post("/", verifyJWT, createActivityLog);
 router.delete("/:pageId", verifyJWT, deleteLogsByPage);
 
 export default router;
+
+// ACTIVITY LOG POSTMAN TESTING POSTMAN COMPLETED

@@ -11,11 +11,12 @@ const workspaceSchema = new Schema(
       type: String,
       default: "",
     },
-    createdBy: {
-      type: Schema.Types.ObjectId,
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+    
     collaborators: [
       {
         type: Schema.Types.ObjectId,
