@@ -35,7 +35,7 @@ const verifyAccess = async (pageId, userId) => {
  * @route POST /api/blocks
  */
 export const createBlock = asyncHandler(async (req, res) => {
-  const { pageId, type, content, parentBlock, position } = req.body;
+  const { pageId, type, content, parentBlock, position, order } = req.body;
   const userId = req.user._id;
 
   await verifyAccess(pageId, userId);
@@ -47,6 +47,7 @@ export const createBlock = asyncHandler(async (req, res) => {
     parentBlock: parentBlock || null,
     createdBy: userId,
     position: position || 0,
+    order
   });
 
   return res

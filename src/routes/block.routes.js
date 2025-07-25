@@ -8,3 +8,5 @@ router.route("/:pageId").post(verifyJWT, createBlock).get(verifyJWT, getBlocksBy
 router.route("/:blockId").patch(verifyJWT, updateBlock).delete(verifyJWT, deleteBlock);
 
 export default router;
+
+//blocks testing done 

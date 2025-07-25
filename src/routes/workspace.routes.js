@@ -6,6 +6,8 @@ const router = Router();
 
 router.route("/").post(verifyJWT, createWorkspace).get(verifyJWT, getUserWorkspaces);
 router.route("/:workspaceId").patch(verifyJWT, updateWorkspace).delete(verifyJWT, deleteWorkspace);
-router.post("/:workspaceId/collaborators", verifyJWT, addCollaborator);
+router.patch("/:workspaceId/collaborators", verifyJWT, addCollaborator);
 router.delete("/:workspaceId/collaborators", verifyJWT, removeCollaborator);
 export default router;
+
+//workspace testing done 

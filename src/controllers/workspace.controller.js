@@ -129,6 +129,10 @@ const addCollaborator = asyncHandler(async (req, res) => {
   const { workspaceId } = req.params;
   const { userId } = req.body;
 
+  if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+    throw new ApiError(400, "A valid userId must be provided");
+  }
+
   const workspace = await Workspace.findById(workspaceId);
 
   if (!workspace) {
@@ -139,7 +143,11 @@ const addCollaborator = asyncHandler(async (req, res) => {
     throw new ApiError(403, "Only the owner can add collaborators");
   }
 
-  if (workspace.collaborators.includes(userId)) {
+  const alreadyCollaborator = workspace.collaborators.some(id =>
+    id.equals(userId)
+  );
+
+  if (alreadyCollaborator) {
     throw new ApiError(400, "User already a collaborator");
   }
 

@@ -8,3 +8,5 @@ router.route("/:workspaceId").post(verifyJWT, createPage).get(verifyJWT, getPage
 router.route("/:pageId").patch(verifyJWT, updatePage).delete(verifyJWT, deletePage);
 
 export default router;
+
+// pages testing done 
