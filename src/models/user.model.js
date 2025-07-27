@@ -42,7 +42,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: [ "user", "admin", "editor", "viewer"],
       default: "user",
     }
   },
@@ -99,6 +99,7 @@ fullName: this.fullName,
 avatar: this.avatar,
 coverImage: this.coverImage,
 createdAt: this.createdAt,
+role: this.role
 };
 };
 

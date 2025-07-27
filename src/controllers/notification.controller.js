@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 export const getNotifications = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
-  const notifications = await Notification.find({ user: userId }).sort({
+ const notifications = await Notification.find({ recipient: userId }).sort({
     createdAt: -1,
   });
 
@@ -36,8 +36,7 @@ export const markAsRead = asyncHandler(async (req, res) => {
   if (!notification) {
     throw new ApiError(404, "Notification not found");
   }
-
-  if (!notification.user.equals(req.user._id)) {
+  if (!notification.recipient.equals(req.user._id)) {
     throw new ApiError(403, "Access denied to this notification");
   }
 
@@ -56,10 +55,7 @@ export const markAsRead = asyncHandler(async (req, res) => {
 export const markAllAsRead = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
-  await Notification.updateMany(
-    { user: userId, read: false },
-    { $set: { read: true } }
-  );
+ await Notification.updateMany({ recipient: userId, seen: false }, )
 
   return res
     .status(200)
@@ -78,7 +74,7 @@ export const deleteNotification = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Notification not found");
   }
 
-  if (!notification.user.equals(req.user._id)) {
+  if (!notification.recipient.equals(req.user._id)) {
     throw new ApiError(403, "You are not allowed to delete this notification");
   }
 

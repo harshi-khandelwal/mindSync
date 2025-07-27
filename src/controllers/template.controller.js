@@ -10,19 +10,19 @@ import mongoose from "mongoose";
  * @route POST /api/templates
  */
 export const createTemplate = asyncHandler(async (req, res) => {
-  const { title, description, content, type = "page" } = req.body;
+  const { name, content, type = "Page", isPublic = false } = req.body;
   const userId = req.user._id;
 
-  if (!title || !content) {
-    throw new ApiError(400, "Title and content are required");
+  if (!name || !content) {
+    throw new ApiError(400, "Name and content are required");
   }
 
   const template = await Template.create({
-    title,
-    description,
+    name,
     content,
     type,
     createdBy: userId,
+    isPublic,
   });
 
   return res
@@ -31,19 +31,17 @@ export const createTemplate = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc Get all templates created by the user
+ * @desc Get all public templates
  * @route GET /api/templates
  */
-export const getUserTemplates = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
-
-  const templates = await Template.find({ createdBy: userId }).sort({
-    createdAt: -1,
+export const getAllTemplates = asyncHandler(async (req, res) => {
+  const templates = await Template.find({ isPublic: true }).sort({
+    usageCount: -1,
   });
 
   return res
     .status(200)
-    .json(new ApiResponse(200, templates, "Templates fetched"));
+    .json(new ApiResponse(200, templates, "Public templates fetched"));
 });
 
 /**
@@ -62,7 +60,10 @@ export const getTemplateById = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Template not found");
   }
 
-  if (!template.createdBy.equals(req.user._id)) {
+  if (
+    !template.isPublic &&
+    template.createdBy.toString() !== req.user._id.toString()
+  ) {
     throw new ApiError(403, "You do not have access to this template");
   }
 
@@ -78,7 +79,7 @@ export const getTemplateById = asyncHandler(async (req, res) => {
 export const updateTemplate = asyncHandler(async (req, res) => {
   const { templateId } = req.params;
   const userId = req.user._id;
-  const { title, description, content, type } = req.body;
+  const { name, content, type, isPublic } = req.body;
 
   const template = await Template.findById(templateId);
   if (!template) {
@@ -89,10 +90,10 @@ export const updateTemplate = asyncHandler(async (req, res) => {
     throw new ApiError(403, "You are not the owner of this template");
   }
 
-  if (title) template.title = title;
-  if (description) template.description = description;
+  if (name) template.name = name;
   if (content) template.content = content;
   if (type) template.type = type;
+  if (typeof isPublic === "boolean") template.isPublic = isPublic;
 
   await template.save();
 

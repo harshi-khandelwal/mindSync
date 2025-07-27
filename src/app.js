@@ -44,7 +44,8 @@ import collaboratorRoutes from "./routes/collaborator.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import activityLogRoutes from "./routes/activityLog.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
-
+import mindmapRoutes from "./routes/mindmap.routes.js"
+import templateRoutes from "./routes/template.routes.js"
 // Base route prefix (e.g. /api/v1)
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/workspaces", workspaceRoutes);
@@ -55,8 +56,8 @@ app.use("/api/v1/collaborators", collaboratorRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/activity-logs", activityLogRoutes);
 app.use("/api/v1/admin", adminRoutes);
-// app.use("api/v1/mindmap", mindmapRoutes);
-
+app.use("/api/v1/mindmap", mindmapRoutes);
+app.use("/api/v1/template", templateRoutes);
 // ================== Error Handler ==================
 app.use(errorMiddleware); // custom error handling middleware
 

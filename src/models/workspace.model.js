@@ -12,15 +12,16 @@ const workspaceSchema = new Schema(
       default: "",
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    
     collaborators: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        user: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
       },
     ],
     pages: [

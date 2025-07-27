@@ -10,7 +10,7 @@ import fs from "fs";
 
 // ======================== REGISTER ========================
 const registerUser = asyncHandler(async (req, res) => {
-    const { fullName, username, email, password } = req.body;
+    const { fullName, username, email, password, role } = req.body;
 
     if (!fullName || !username || !email || !password) {
         if (req.file) fs.unlinkSync(req.file.path);
@@ -39,6 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
         email,
         password,
         avatar: avatarUrl,
+        role
     });
 
     const token = generateToken(user._id);
@@ -147,7 +148,7 @@ const logoutUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, null, "User logged out successfully"));
 });
 
-// ======================== EXPORTS ========================
+
 export {
     registerUser,
     loginUser,

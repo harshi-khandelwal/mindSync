@@ -52,7 +52,7 @@ const getWorkspaceById = asyncHandler(async (req, res) => {
 
   const workspace = await Workspace.findById(workspaceId).populate(
     "collaborators",
-    "name email"
+    "fullName", "email", "username"
   );
 
   if (!workspace) {
@@ -61,7 +61,7 @@ const getWorkspaceById = asyncHandler(async (req, res) => {
 
   if (
     !workspace.isPublic &&
-    !workspace.collaborators.includes(req.user._id)
+    !workspace.collaborators.some((id) => id.equals(req.user._id))
   ) {
     throw new ApiError(403, "Access denied to this workspace");
   }

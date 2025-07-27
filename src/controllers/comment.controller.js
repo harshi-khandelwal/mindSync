@@ -17,7 +17,7 @@ export const createComment = asyncHandler(async (req, res) => {
   }
 
   const comment = await Comment.create({
-    user: req.user._id,
+    createdBy: req.user._id,
     content,
     page: pageId,
     block: blockId,
@@ -44,7 +44,7 @@ export const getComments = asyncHandler(async (req, res) => {
   if (blockId) filter.block = blockId;
 
   const comments = await Comment.find(filter)
-    .populate("user", "name email avatar")
+    .populate("createdBy", "name email avatar")
     .sort({ createdAt: -1 });
 
   return res
@@ -68,8 +68,8 @@ export const updateComment = asyncHandler(async (req, res) => {
   if (!comment) {
     throw new ApiError(404, "Comment not found");
   }
-
-  if (comment.user.toString() !== req.user._id.toString()) {
+if (comment.createdBy.toString() !== req.user._id.toString())
+ {
     throw new ApiError(403, "You are not authorized to update this comment");
   }
 
@@ -93,7 +93,8 @@ export const deleteComment = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Comment not found");
   }
 
-  if (comment.user.toString() !== req.user._id.toString()) {
+  if (comment.createdBy.toString() !== req.user._id.toString())
+ {
     throw new ApiError(403, "You are not authorized to delete this comment");
   }
 
